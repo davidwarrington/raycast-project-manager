@@ -1,4 +1,5 @@
 import fs from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
 import { Action, ActionPanel, Application, getPreferenceValues, List, open } from "@raycast/api";
 import { useEffect, useState } from "react";
@@ -10,6 +11,7 @@ interface ProjectDirectory {
 
 interface Preferences {
   preferredApplication: Application;
+  projectDirectory: string;
 }
 
 function OpenProjectAction({ onOpen }: { onOpen: () => void }) {
@@ -47,8 +49,9 @@ function useDirs(baseDir: string) {
 }
 
 export default function OpenProject() {
-  const { directories, getDirectories, state } = useDirs("/");
   const preferences = getPreferenceValues<Preferences>();
+  const projectDirectory = preferences.projectDirectory.replace(/^~/, os.homedir);
+  const { directories, getDirectories, state } = useDirs(projectDirectory);
 
   useEffect(() => {
     getDirectories();

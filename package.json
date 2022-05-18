@@ -21,6 +21,14 @@
       "type": "appPicker",
       "required": true,
       "title": "Preferred Application"
+    },
+    {
+      "name": "projectDirectory",
+      "description": "Choose where your projects can be found",
+      "type": "textfield",
+      "required": true,
+      "title": "Project Directory",
+      "default": "~/Documents"
     }
   ],
   "dependencies": {
