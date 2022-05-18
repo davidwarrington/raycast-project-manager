@@ -25,17 +25,13 @@ function useDirs(baseDir: string) {
   async function getDirectories() {
     const dir = await fs.readdir(baseDir);
 
-    const dirs = await Promise.all(
-      dir
-        .filter(async (child) => {
-          const stats = await fs.stat(path.join(baseDir, child));
-          return stats.isDirectory();
-        })
-        .map((name) => ({
-          name,
-          path: path.join(baseDir, name),
-        }))
-    );
+    const children = dir.map((name) => ({
+      name,
+      path: path.join(baseDir, name),
+    }));
+    const stats = await Promise.all(children.map((child) => fs.stat(child.path)));
+
+    const dirs = children.filter((_, index) => stats[index].isDirectory());
 
     setState("idle");
     setDirectories(dirs);
